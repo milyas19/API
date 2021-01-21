@@ -31,12 +31,11 @@ class App extends Component {
   }
 
   addItem() {
-    // const newId = this.state.items.length + 1;
-    const newList = this.state.items.concat({ name:'Hong'});
-
+    const newId = this.state.items.length + 1;
+    const newItem = [{name:'Hong',id:newId, email:'hh@hotmail.com',username:'Hong', phone:55555555}];
+    const newList = this.state.items.concat(newItem);
     this.setState({ items: newList });
-    }
-  
+    }  
 
   render() {
     var { isLoaded, items } = this.state;
@@ -49,7 +48,7 @@ class App extends Component {
           <ul>
             {items.map(item => (
               <span key={item.id} >
-                Name: {item.name} | Email: {item.email} | Username: {item.username} | Phone: {item.phone}
+                Name: {item.name} | Email: {item.email} | Username: {item.username} | Phone: {item.phone} | Id: {item.id}
                 <div>
                 <button onClick={() => { this.removeItem(item.id)}}>Delete</button>                 
                 </div>
