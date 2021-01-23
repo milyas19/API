@@ -1,66 +1,49 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 
-class App extends Component {
+function App() {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: [],
-      isLoaded: false,
-    }
-    this.removeItem = this.removeItem.bind(this);
-    this.addItem = this.addItem.bind(this);
-  }
-
-  componentDidMount() {
-    fetch('https://jsonplaceholder.typicode.com/users')
+  const url = 'https://jsonplaceholder.typicode.com/users';
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    fetch(url)
       .then(res => res.json())
-      .then(json => {
-        this.setState({
-          isLoaded: true,
-          items: json,
-        })
+      .then((res) => {
+        setUsers(res)
       })
-  }
+  }, [users])
 
-  removeItem(itemId) {
-    if (this.state.items.length !== 0) {
-      const items = this.state.items.filter(item => item.id !== itemId);
-      this.setState({ items: items });
+  const removeItem = (itemId) => {
+    console.log(itemId)
+    // console.log(users)
+    if (users.length !== 0) {
+      console.log(users)
+      const items = users.filter(item => item.id !== itemId);
+      console.log(items)    
+      setUsers(users=>items);
     }
   }
 
-  addItem() {
-    const newId = this.state.items.length + 1;
-    const newItem = [{name:'Hong',id:newId, email:'hh@hotmail.com',username:'Hong', phone:55555555}];
-    const newList = this.state.items.concat(newItem);
-    this.setState({ items: newList });
-    }  
+  // const addItem = () => {
+  //   const newId = users.length + 1;
+  //   const newItem = [{ name: 'Hong', id: newId, email: 'hh@hotmail.com', username: 'Hong', phone: 55555555 }];
+  //   const newList = users.concat(newItem);
+  //   setUsers(newList);
+  // }
 
-  render() {
-    var { isLoaded, items } = this.state;
-    if (!isLoaded) {
-      return <div> Loading...</div>;
-    }
-    else {
-      return (
-        <div>
-          <ul>
-            {items.map(item => (
-              <span key={item.id} >
-                Name: {item.name} | Email: {item.email} | Username: {item.username} | Phone: {item.phone} | Id: {item.id}
-                <div>
-                <button onClick={() => { this.removeItem(item.id)}}>Delete</button>                 
-                </div>
-              </span>               
-            ))}
-            <button onClick={() => { this.addItem() }}>Add</button> 
-          </ul>          
-        </div>
-      )
-
-    }
+  return users.map(function (user, index) {
+    // console.log(user)
+    return (
+      <div key={index}>
+        <span>
+          Name: {user.name} | Email: {user.email} | Username: {user.username} | Phone: {user.phone} | Id: {user.id}
+          <div>
+            <button onClick={() => removeItem(user.id)}>Delete</button>
+          </div>
+        </span>
+      </div>
+    )
   }
+  )
 }
 
 
